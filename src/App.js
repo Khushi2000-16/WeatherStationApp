@@ -13,6 +13,8 @@ function App() {
     if (event.key === 'Enter') {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`;
       axios.get(url).then((response) => {
+        const celsiusTemp = response.data.main.temp - 273.15; // Convert from Kelvin to Celsius
+        response.data.main.temp = celsiusTemp;
         setData(response.data)
         console.log(response.data)
       })
@@ -23,6 +25,7 @@ function App() {
       setLocation('');
     }
   }
+
 
   return (
     <div className="app">
@@ -40,7 +43,7 @@ function App() {
             <p>{data.name}</p>
           </div>
           <div className="temp">
-            {data.main ? <h1>{data.main.temp.toFixed()}°F</h1> : null}
+            {data.main ? <h1>{data.main.temp.toFixed()}°C</h1> : null}
           </div>
           <div className="description">
             {data.weather ? <p>{data.weather[0].main}</p> : null}
@@ -50,7 +53,7 @@ function App() {
         {data.name !== undefined &&
           <div className="bottom">
             <div className="feels">
-              {data.main ? <p className='bold'>{data.main.feels_like.toFixed()}°F</p> : null}
+              {data.main ? <p className='bold'>{data.main.temp.toFixed()}°C</p> : null}
               <p>Feels Like</p>
             </div>
             <div className="humidity">
